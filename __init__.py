@@ -20,7 +20,7 @@ sv = Service(name=sv_name, use_priv=priv.NORMAL, manage_priv=priv.ADMIN,
 def _parse_tokens(text: str):
     # Initialization
     tokens = text.strip().split()
-    allies, enemies, character = [], []
+    allies, enemies, character = [], [], []
     pos = 0
 
     for token in tokens:
