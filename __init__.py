@@ -68,9 +68,9 @@ async def speed_test(bot, ev: CQEvent):
         for (enemy, enemy_min, enemy_max, mean, med, ally_min) in ret:
             lines.append(
                 f'\n- {enemy}：速度区间[{enemy_min:.1f}, {enemy_max:.1f}]，'
-                f'\nMC均值{mean:.1f}，中位数{med:.1f}，稳定超车速度{ally_min:.1f}'
+                f'MC均值{mean:.1f}，中位数{med:.1f}，稳定超车速度{ally_min:.1f}'
             )
-        msg = '\n'.join(lines)
+        msg = ''.join(lines)
         await bot.send(ev, msg, at_sender=True)
     except Exception as e:
         await bot.send(ev, f'计算错误，请检查输入数值是否正确', at_sender=True)
