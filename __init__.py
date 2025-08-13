@@ -59,7 +59,8 @@ async def speed_test(bot, ev: CQEvent):
             f'输入错误，请检查输入，或发团战测速查看详细用法', at_sender=True)
     # Compute the speeds of enemies
     try:
-        ret = compute_speed(allies=allies, enemies=enemies, N_sample=int(10e6))
+        ret = await compute_speed_async(allies=allies, enemies=enemies, 
+                                        N_sample=int(1e6))
 
         lines = []
         for (enemy, enemy_min, enemy_max, mean, med, ally_min) in ret:
