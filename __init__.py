@@ -41,6 +41,8 @@ def _parse_tokens(text: str):
                 enemies.append(tuple(character))
                 character = [token]
                 pos = 1
+    # Put the last charactor into enmies if it has three elements
+    if character: enemies.append(tuple(character))
 
     return allies, enemies
 
