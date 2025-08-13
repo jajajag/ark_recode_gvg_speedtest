@@ -77,9 +77,11 @@ def compute_speed(
 async def compute_speed_async(*args, **kwargs):
     return await asyncio.to_thread(compute_speed, *args, **kwargs)
 
-ally_1 = ('水马', 1, 56, 135)
-ally_2 = ('水琴', 1, 70, 170)
-ally_3 = ('水拳', 4, 58, 131)
-enemy_1 = ('朱茵', 1, 101)
-enemy_2 = ('盖儿', 1, 84)
-print(compute_speed([ally_1, ally_2, ally_3], [enemy_1, enemy_2], N_sample=10**6))
+if __name__ == '__main__':
+    ally_1 = ('水马', 1, 56, 135)
+    ally_2 = ('水琴', 1, 70, 170)
+    ally_3 = ('水拳', 4, 58, 131)
+    enemy_1 = ('朱茵', 1, 101)
+    enemy_2 = ('盖儿', 1, 84)
+    print(compute_speed([ally_1, ally_2, ally_3], [enemy_1, enemy_2], 
+                        N_sample=int(1e6)))
