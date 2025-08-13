@@ -4,9 +4,8 @@ from .speed import compute_speed_async
 
 sv_name = '团战测速'
 sv_help = (
-    '星陨计划团战测速（没输入速度的为敌方）\n'
-    '每行格式：角色 乱速 终点行动条 [速度]\n'
-    '示例：\n'
+    '星陨计划团战测速（没输入速度的为敌方，101表示到达终点）\n'
+    '每行格式：角色 乱速 终点行动条 [速度] 示例：\n'
     '团战测速\n'
     '我方A 0 80 180\n'
     '我方B 5 90 165\n'
@@ -43,6 +42,14 @@ def _parse_tokens(text: str):
                 pos = 1
     # Put the last charactor into enmies if it has three elements
     if character: enemies.append(tuple(character))
+
+    # Change the action gauge to 100 if not a single >100 value is specified
+    end_gauge = [x[2] for x in allies + enemies]
+    if not any(v > 100 for v in end_gauge) and end_gauge.count(100) == 1:
+        for lst in (allies, enemies):
+            for i, item in enumerate(lst):
+                if item[2] == 100:
+                    lst[i] = item[:2] + (101,) + item[3:]
 
     return allies, enemies
 

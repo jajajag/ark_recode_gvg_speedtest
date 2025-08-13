@@ -1,7 +1,7 @@
 import asyncio
 import numpy as np
 
-# 行动条输入为100.5时，说明跑到行动条底
+# An action gauge of >100 means the character is the first to act.
 def compute_speed(
         allies: list[tuple[str, float, float, float]],
         enemies: list[tuple[str, float, float]],
@@ -14,25 +14,24 @@ def compute_speed(
     enemy_start_gauge, enemy_end_gauge = [], []
 
     for i in range(len(allies)):
-        # 我方乱速范围
+        # Ranges of allies' action gauges
         ally_start_gauge_lower = max(allies[i][1] - 0.5, 0)
         ally_start_gauge_upper = min(allies[i][1] + 0.5, 5)
         ally_end_gauge_lower = min(allies[i][2] - 0.5, 100)
         ally_end_gauge_upper = min(allies[i][2] + 0.5, 100)
-        # Sample我方行动条
+        # Sample allies' action gauges
         ally_start_gauge.append(np.random.uniform(
             ally_start_gauge_lower, ally_start_gauge_upper, N_sample))
         ally_end_gauge.append(np.random.uniform(
             ally_end_gauge_lower, ally_end_gauge_upper, N_sample))
 
-    # Sample敌方行动条
     for i in range(len(enemies)):
-        # 敌方乱速范围
+        # Ranges of enemies' action gauges
         enemy_start_gauge_lower = max(enemies[i][1] - 0.5, 0)
         enemy_start_gauge_upper = min(enemies[i][1] + 0.5, 5)
         enemy_end_gauge_lower = min(enemies[i][2] - 0.5, 100)
         enemy_end_gauge_upper = min(enemies[i][2] + 0.5, 100)
-        # Sample敌方行动条
+        # Sample enemies' action gauges
         enemy_start_gauge.append(np.random.uniform(
             enemy_start_gauge_lower, enemy_start_gauge_upper, N_sample))
         enemy_end_gauge.append(np.random.uniform(
@@ -40,15 +39,15 @@ def compute_speed(
 
     enemy_info = []
     for i in range(len(enemies)):
-        # 敌方速度范围
+        # Initialize enemy's speed bounds
         enemy_min_speed, enemy_max_speed = 0, float('inf')
         enemy_speed_cat = []
 
         for j in range(len(allies)):
-            # 计算敌方速度，存入对应位置
+            # Compute enemy's speed using Monte Carlo
             enemy_speed = (enemy_end_gauge[i] - enemy_start_gauge[i]) \
                     / (ally_end_gauge[j] - ally_start_gauge[j]) * allies[j][3]
-            # 计算敌方的速度上下界（改用Monte Carlo）
+            # Enemy's strict speed bounds (Now we use Monte Carlo)
             #min_speed = ally_speed * (enemy_end_lower - enemy_start_upper) \
             #        / (ally_end_upper - ally_start_lower)
             #max_speed = ally_speed * (enemy_end_upper - enemy_start_lower) \
@@ -57,16 +56,16 @@ def compute_speed(
             enemy_max_speed = min(enemy_max_speed, np.max(enemy_speed))
             enemy_speed_cat.append(enemy_speed)
 
-        # 过滤不可能的速度
+        # Filter out impossible speeds
         enemy_speed_cat = np.concatenate(enemy_speed_cat)
         enemy_speed_cat = enemy_speed_cat[np.where(
             (enemy_speed_cat <= enemy_max_speed) \
             & (enemy_speed_cat >= enemy_min_speed))]
 
-        # 计算MC均值和中位数
+        # Compute mean and median speeds
         mean = np.mean(enemy_speed_cat)
         med = np.median(enemy_speed_cat)
-        # 计算我方稳定超车的速度
+        # Compute ally's minimum speed to act before this enemy
         ally_min_speed = enemy_max_speed / 0.95
         
         enemy_info.append((enemies[i][0], enemy_min_speed, enemy_max_speed,
