@@ -4,7 +4,7 @@ from .speed import compute_speed_async, overtake_prob
 
 sv_name = '团战测速'
 sv_help = (
-    '[团战测速] 星陨计划团战测速'
+    '[团战测速] 星陨计划团战测速，示例：\n'
     '团战测速\n'
     '水马 1 56 135\n'
     '水琴 1 70 170\n'
@@ -62,7 +62,7 @@ async def speed_test(bot, ev: CQEvent):
     raw = ev.message.extract_plain_text()
     # Output instructions if no text is provided
     if not raw.strip():
-        await bot.finish(ev, sv_help, at_sender=True)
+        await bot.finish(ev, '\n' + sv_help, at_sender=True)
     # Parse the input tokens
     try:
         allies, enemies = _parse_tokens(raw)
