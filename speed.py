@@ -76,6 +76,23 @@ def compute_speed(
 async def compute_speed_async(*args, **kwargs):
     return await asyncio.to_thread(compute_speed, *args, **kwargs)
 
+# Calculate the probability that chara_1 acts before chara_2
+def overtake_prob(v1, v2):
+    # Compute the ratio of speeds
+    r = v2 / v1
+
+    # 4 possible outcomes (close-form solution dereived by ChatGPT):
+    if r <= 19/20:
+        return 1.0
+    if r >= 20/19:
+        return 0.0
+    if r <= 1.0:
+        p = -200 * r + 381 - 361 / (2 * r)
+    else:
+        p = 361 / 2 * r - 380 + 200 / r
+
+    return p
+
 if __name__ == '__main__':
     ally_1 = ('水马', 1, 56, 135)
     ally_2 = ('水琴', 1, 70, 170)
@@ -84,3 +101,8 @@ if __name__ == '__main__':
     enemy_2 = ('盖儿', 1, 84)
     print(compute_speed([ally_1, ally_2, ally_3], [enemy_1, enemy_2], 
                         N_sample=int(1e6)))
+    print(overtake_prob(100, 100))
+    print(overtake_prob(95, 100))
+    print(overtake_prob(100, 95))
+    print(overtake_prob(240, 246))
+    print(overtake_prob(246, 240))
