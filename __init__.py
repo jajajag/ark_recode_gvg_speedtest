@@ -85,7 +85,7 @@ async def speed_test(bot, ev: CQEvent):
     except Exception as e:
         await bot.send(ev, f'计算错误，请检查输入数值是否正确', at_sender=True)
 
-@sv.on_rex(r'^超车\s+(\d+)\s+(\d+)$')
+@sv.on_rex(r'^超车\s*(\d+)\s+(\d+)$')
 async def overtake(bot, ev: CQEvent):
     # Match input numbers
     match = ev['match']
