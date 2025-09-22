@@ -40,7 +40,7 @@
 【超车】计算角色A超车角色B的百分比概率。
 
 ```
-python frame_buffer.py xx
+python frame_buffer_ark.py
 ```
 
 【卡帧】原本是pcr用的mumu卡帧脚本，修改一下可以在星陨计划里用来卡帧刷真实乱速。
